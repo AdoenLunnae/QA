@@ -3,94 +3,67 @@
 namespace App\Controller;
 
 use App\Entity\Answer;
+use App\Entity\Question;
 use App\Form\AnswerType;
 use App\Repository\AnswerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/answer")
- */
 class AnswerController extends AbstractController
 {
     /**
-     * @Route("/", name="answer_index", methods={"GET"})
-     */
-    public function index(AnswerRepository $answerRepository): Response
-    {
-        return $this->render('answer/index.html.twig', [
-            'answers' => $answerRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="answer_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
+     * @Route("/question/{id}/answer/new")
+    */
+    public function new(Question $question, Request $request)
     {
         $answer = new Answer();
         $form = $this->createForm(AnswerType::class, $answer);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
+
             $entityManager = $this->getDoctrine()->getManager();
+            $answer->setQuestion($question);
+
             $entityManager->persist($answer);
             $entityManager->flush();
 
-            return $this->redirectToRoute('answer_index');
+            return $this->redirectToRoute('question_show', ['id' => $answer->getQuestion()->getId()]);
         }
-
         return $this->render('answer/new.html.twig', [
-            'answer' => $answer,
             'form' => $form->createView(),
+            'question' => $answer->getQuestion()
         ]);
     }
 
     /**
-     * @Route("/{id}", name="answer_show", methods={"GET"})
+     * @Route("/answer/{id}", name = answer_edit)
      */
-    public function show(Answer $answer): Response
-    {
-        return $this->render('answer/show.html.twig', [
-            'answer' => $answer,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="answer_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Answer $answer): Response
+    public function edit(Answer $answer, Request $request)
     {
         $form = $this->createForm(AnswerType::class, $answer);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($form->isSubmitted() && $form->isValid())
+        {
 
-            return $this->redirectToRoute('answer_index', [
-                'id' => $answer->getId(),
-            ]);
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->persist($answer);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('question_show', ['id' => $answer->getQuestion()->getId()]);
         }
-
-        return $this->render('answer/edit.html.twig', [
-            'answer' => $answer,
+        return $this->render('answer/new.html.twig', [
             'form' => $form->createView(),
+            'question' => $answer->getQuestion()
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="answer_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, Answer $answer): Response
+    public function remove()
     {
-        if ($this->isCsrfTokenValid('delete'.$answer->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($answer);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('answer_index');
+        return;
     }
 }
