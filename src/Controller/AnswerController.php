@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AnswerController extends AbstractController
 {
     /**
-     * @Route("/question/{id}/answer/new")
+     * @Route("/question/{id}/answer/new", name="answer_new")
     */
     public function new(Question $question, Request $request)
     {
@@ -39,7 +39,7 @@ class AnswerController extends AbstractController
     }
 
     /**
-     * @Route("/answer/{id}", name = answer_edit)
+     * @Route("/answer/{id}", name="answer_edit")
      */
     public function edit(Answer $answer, Request $request)
     {
@@ -62,8 +62,9 @@ class AnswerController extends AbstractController
         ]);
     }
 
-    public function remove()
+    public function remove(Answer $answer, Request $request)
     {
+
         return;
     }
 }

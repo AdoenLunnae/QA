@@ -32,6 +32,12 @@ class Answer
      */
     private $question;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="answers")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $createbBy;
+
     public function  __construct()
     {
         $this->createdAt = new \DateTime();
@@ -74,6 +80,18 @@ class Answer
     public function setQuestion(?Question $question): self
     {
         $this->question = $question;
+
+        return $this;
+    }
+
+    public function getCreatebBy(): ?User
+    {
+        return $this->createbBy;
+    }
+
+    public function setCreatebBy(?User $createbBy): self
+    {
+        $this->createbBy = $createbBy;
 
         return $this;
     }
