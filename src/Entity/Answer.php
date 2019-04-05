@@ -38,6 +38,11 @@ class Answer
      */
     private $createbBy;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isResolved;
+
     public function  __construct()
     {
         $this->createdAt = new \DateTime();
@@ -92,6 +97,18 @@ class Answer
     public function setCreatebBy(?User $createbBy): self
     {
         $this->createbBy = $createbBy;
+
+        return $this;
+    }
+
+    public function getIsResolved(): ?bool
+    {
+        return $this->isResolved;
+    }
+
+    public function setIsResolved(bool $isResolved): self
+    {
+        $this->isResolved = $isResolved;
 
         return $this;
     }

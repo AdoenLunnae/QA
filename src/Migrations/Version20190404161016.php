@@ -41,7 +41,7 @@ final class Version20190404161016 extends AbstractMigration
         $this->addSql('ALTER TABLE question DROP FOREIGN KEY FK_B6F7494EB03A8386');
         $this->addSql('DROP TABLE user');
         $this->addSql('DROP INDEX IDX_DADD4A25D3EAB6BC ON answer');
-        $this->addSql('ALTER TABLE answer DROP createb_by_id');
+        $this->addSql('ALTER TABLE answer DROP created_by_id');
         $this->addSql('DROP INDEX IDX_B6F7494EB03A8386 ON question');
         $this->addSql('ALTER TABLE question DROP created_by_id');
     }

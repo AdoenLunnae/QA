@@ -39,6 +39,16 @@ class Question
      */
     private $createdBy;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isResolved;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Answer", cascade={"persist", "remove"})
+     */
+    private $bestAnswer;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -113,6 +123,30 @@ class Question
     public function setCreatedBy(?User $createdBy): self
     {
         $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function getIsResolved(): ?bool
+    {
+        return $this->isResolved;
+    }
+
+    public function setIsResolved(bool $isResolved): self
+    {
+        $this->isResolved = $isResolved;
+
+        return $this;
+    }
+
+    public function getBestAnswer(): ?Answer
+    {
+        return $this->bestAnswer;
+    }
+
+    public function setBestAnswer(?Answer $bestAnswer): self
+    {
+        $this->bestAnswer = $bestAnswer;
 
         return $this;
     }
